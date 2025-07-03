@@ -88,6 +88,29 @@ dcr() {
   fi
 }
 
+# Execute command in running docker container
+dex() {
+  if [[ -z "$1" ]]; then
+    echo "❌ Usage: dex <container_name> <command>"
+    echo "   Example: dex my-container bash"
+    echo "   Example: dex my-container sh"
+    echo "   Example: dex my-container ls -la"
+    return 1
+  fi
+  
+  if [[ -z "$2" ]]; then
+    echo "❌ Usage: dex <container_name> <command>"
+    echo "   Missing command parameter"
+    return 1
+  fi
+  
+  local container="$1"
+  shift # Remove first argument (container name)
+  
+  echo "🐳 docker exec -it $container $@"
+  docker exec -it "$container" "$@"
+}
+
 # Show all docker images
 dimages() {
   echo "🖼️  docker images"
@@ -243,6 +266,7 @@ ah-help() {
   echo "  dceb <service>                    - Execute bash in container"
   echo "  dclog <service> [-grep <pattern>] - Show container logs"
   echo "  dcr <service> [command]           - Run command in new container"
+  echo "  dex <container> <command>          - Execute command in running container"
   echo ""
   echo "🖼️  IMAGE MANAGEMENT:"
   echo "  dimages                           - Show all docker images"
