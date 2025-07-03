@@ -288,12 +288,19 @@ ah-help() {
   echo "  fsshc   - fly ssh console --pty -C 'bin/rails console'"
   echo "  flog    - fly logs"
   echo ""
+  echo "🔧 PLUGIN MANAGEMENT:"
+  echo "  ah-update                         - Update plugin to latest version"
+  echo "  ah-version                        - Show plugin version"
+  echo "  ahu                               - Alias for ah-update"
+  echo ""
   echo "💡 Usage Examples:"
   echo "  dceb web                          # Enter web container bash"
   echo "  dclog api -grep ERROR             # Show API logs filtered by ERROR"
   echo "  dcr worker rails console          # Run Rails console in worker container"
+  echo "  dex my-container bash             # Execute bash in running container"
   echo "  dsearch postgres                  # Search for postgres images"
   echo "  drmi <none>                       # Remove untagged images"
+  echo "  ah-update                         # Update plugin to latest version"
   echo ""
   echo "For more help, visit: https://github.com/al0xd/ah"
 }
@@ -307,11 +314,64 @@ alias ah='ah-help'
 
 # Additional convenience aliases
 alias dps='dpsrun'
+alias ahu='ah-update'
 
 # Plugin version
 ah-version() {
   echo "AH Plugin v1.0.0"
   echo "https://github.com/al0xd/ah"
+}
+
+# Update plugin to latest version
+ah-update() {
+  echo "🔄 Updating AH Plugin..."
+  
+  # Get the plugin directory
+  local plugin_dir="${(%):-%x}"
+  plugin_dir="${plugin_dir:A:h}"
+  
+  # Change to plugin directory
+  cd "$plugin_dir"
+  
+  # Check if it's a git repository
+  if [[ ! -d .git ]]; then
+    echo "❌ Plugin directory is not a git repository"
+    echo "   Please reinstall the plugin from: https://github.com/al0xd/ah"
+    return 1
+  fi
+  
+  # Get current branch
+  local current_branch=$(git branch --show-current)
+  
+  # Fetch latest changes
+  echo "📡 Fetching latest changes..."
+  git fetch origin
+  
+  # Check if there are updates
+  local local_commit=$(git rev-parse HEAD)
+  local remote_commit=$(git rev-parse "origin/$current_branch")
+  
+  if [[ "$local_commit" == "$remote_commit" ]]; then
+    echo "✅ Plugin is already up to date!"
+    return 0
+  fi
+  
+  # Pull latest changes
+  echo "⬇️  Pulling latest changes..."
+  if git pull origin "$current_branch"; then
+    echo "✅ Plugin updated successfully!"
+    echo "🔄 Reloading plugin..."
+    
+    # Reload the plugin
+    unset AH_PLUGIN_LOADED
+    source "$plugin_dir/ah.plugin.zsh"
+    
+    echo "🎉 Plugin reloaded! Type 'ah' for help."
+  else
+    echo "❌ Failed to update plugin"
+    echo "   Please check for conflicts or update manually"
+    return 1
+  fi
 }
 
 # Print welcome message when plugin loads
