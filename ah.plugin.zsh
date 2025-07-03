@@ -111,6 +111,40 @@ dex() {
   docker exec -it "$container" "$@"
 }
 
+# Copy files between container and host
+dcp() {
+  if [[ -z "$1" || -z "$2" ]]; then
+    echo "❌ Usage: dcp <source> <destination>"
+    echo ""
+    echo "📂 Copy from container to host:"
+    echo "   dcp container:/path/to/file /local/path/"
+    echo "   dcp container:/app/logs/ ./logs/"
+    echo ""
+    echo "📂 Copy from host to container:"
+    echo "   dcp /local/file container:/path/to/"
+    echo "   dcp ./config.json container:/app/config/"
+    echo ""
+    echo "💡 Tips:"
+    echo "   - Use container:path for container paths"
+    echo "   - Use ./path or /path for host paths"
+    echo "   - Add / at end for directories"
+    return 1
+  fi
+  
+  local source="$1"
+  local destination="$2"
+  
+  echo "📁 docker cp $source $destination"
+  docker cp "$source" "$destination"
+  
+  if [[ $? -eq 0 ]]; then
+    echo "✅ Copy completed successfully!"
+  else
+    echo "❌ Copy failed!"
+    return 1
+  fi
+}
+
 # Show all docker images
 dimages() {
   echo "🖼️  docker images"
@@ -267,6 +301,7 @@ ah-help() {
   echo "  dclog <service> [-grep <pattern>] - Show container logs"
   echo "  dcr <service> [command]           - Run command in new container"
   echo "  dex <container> <command>          - Execute command in running container"
+  echo "  dcp <source> <destination>        - Copy files between container and host"
   echo ""
   echo "🖼️  IMAGE MANAGEMENT:"
   echo "  dimages                           - Show all docker images"
@@ -298,6 +333,8 @@ ah-help() {
   echo "  dclog api -grep ERROR             # Show API logs filtered by ERROR"
   echo "  dcr worker rails console          # Run Rails console in worker container"
   echo "  dex my-container bash             # Execute bash in running container"
+  echo "  dcp web:/app/logs/ ./logs/        # Copy logs from container to host"
+  echo "  dcp ./config.json web:/app/       # Copy config from host to container"
   echo "  dsearch postgres                  # Search for postgres images"
   echo "  drmi <none>                       # Remove untagged images"
   echo "  ah-update                         # Update plugin to latest version"
