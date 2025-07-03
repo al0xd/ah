@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Get version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+    - name: Create release notes
+      id: release_notes
+      run: |
+        # Extract version from CHANGELOG.md
+        VERSION=${{ steps.version.outputs.VERSION }}
+        
+        # Create release notes
+        cat > release_notes.md << EOF
+        # AH Plugin $VERSION
+        
+        ## 🎉 What's New
+        
+        This release includes improvements to the AH (Awesome Helper) Plugin for Oh-My-Zsh.
+        
+        ## 📦 Installation
+        
+        \`\`\`bash
+        git clone https://github.com/${{ github.repository }}.git \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/ah
+        \`\`\`
+        
+        Add \`ah\` to your plugins in \`~/.zshrc\`:
+        \`\`\`bash
+        plugins=(git docker ... ah)
+        \`\`\`
+        
+        ## 🚀 Quick Start
+        
+        After installation, type \`ah\` to see all available commands.
+        
+        ## 📚 Documentation
+        
+        - [Installation Guide](https://github.com/${{ github.repository }}/blob/main/INSTALL.md)
+        - [Contributing](https://github.com/${{ github.repository }}/blob/main/CONTRIBUTING.md)
+        - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+        
+        ## 🔧 Requirements
+        
+        - Zsh 4.3.9+ (5.0.8+ recommended)
+        - Oh-My-Zsh (optional but recommended)
+        - Docker & Docker Compose (for Docker commands)
+        
+        ## ⭐ Support
+        
+        If you find this plugin helpful, please consider giving it a star!
+        EOF
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.VERSION }}
+        release_name: AH Plugin ${{ steps.version.outputs.VERSION }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        
+    - name: Upload plugin file
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ah.plugin.zsh
+        asset_name: ah.plugin.zsh
+        asset_content_type: text/plain

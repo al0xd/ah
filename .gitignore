@@ -1,0 +1,57 @@
+# .gitignore for AH Plugin
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+tmp/
+temp/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# Test files
+test-output/
+coverage/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Cache directories
+.cache/
+*.cache
+
+# User-specific files
+.user.ini
+config.local
+
+# Plugin-specific ignores
+.plugin-test/
+.development/

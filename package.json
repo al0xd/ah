@@ -1,0 +1,55 @@
+{
+  "name": "zsh-plugin-ah",
+  "version": "1.0.0",
+  "description": "AH (Awesome Helper) - A comprehensive Oh-My-Zsh plugin with Docker, Cloud, and utility aliases",
+  "main": "ah.plugin.zsh",
+  "scripts": {
+    "test": "make test",
+    "lint": "make lint",
+    "install-plugin": "make install",
+    "demo": "make demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/al0xd/ah.git"
+  },
+  "keywords": [
+    "zsh",
+    "oh-my-zsh",
+    "plugin",
+    "docker",
+    "aliases",
+    "shell",
+    "terminal",
+    "productivity",
+    "cli",
+    "cloudflare",
+    "flyio",
+    "container",
+    "devtools"
+  ],
+  "author": "al0xd <al0xd@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/al0xd/ah/issues"
+  },
+  "homepage": "https://github.com/al0xd/ah#readme",
+  "engines": {
+    "zsh": ">=4.3.9"
+  },
+  "files": [
+    "ah.plugin.zsh",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "INSTALL.md"
+  ],
+  "devDependencies": {},
+  "peerDependencies": {
+    "oh-my-zsh": "*"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ]
+}

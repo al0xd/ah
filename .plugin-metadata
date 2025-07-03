@@ -1,0 +1,7 @@
+name: AH Plugin
+description: A comprehensive Oh-My-Zsh plugin with Docker, Cloud, and utility aliases
+author: Your Name
+url: https://github.com/al0xd/ah
+depends: zsh
+
+# Plugin metadata for Oh-My-Zsh
