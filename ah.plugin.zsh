@@ -145,6 +145,32 @@ dcp() {
   fi
 }
 
+# Login to docker container with bash
+dlogin() {
+  if [[ -z "$1" ]]; then
+    echo "❌ Usage: dlogin <container_name>"
+    echo "   Example: dlogin my-container"
+    echo "   Example: dlogin web-app"
+    echo "   Example: dlogin postgres"
+    echo ""
+    echo "💡 This will execute: docker exec -it <container_name> bash"
+    echo "   If bash is not available, it will try sh as fallback"
+    return 1
+  fi
+  
+  local container="$1"
+  
+  echo "🐳 docker exec -it $container bash"
+  docker exec -it "$container" bash
+  
+  # If bash failed, try sh as fallback
+  if [[ $? -ne 0 ]]; then
+    echo "⚠️  bash not available, trying sh..."
+    echo "🐳 docker exec -it $container sh"
+    docker exec -it "$container" sh
+  fi
+}
+
 # Show all docker images
 dimages() {
   echo "🖼️  docker images"
@@ -302,6 +328,7 @@ ah-help() {
   echo "  dcr <service> [command]           - Run command in new container"
   echo "  dex <container> <command>          - Execute command in running container"
   echo "  dcp <source> <destination>        - Copy files between container and host"
+  echo "  dlogin <container>                - Login to container with bash"
   echo ""
   echo "🖼️  IMAGE MANAGEMENT:"
   echo "  dimages                           - Show all docker images"
@@ -335,6 +362,7 @@ ah-help() {
   echo "  dex my-container bash             # Execute bash in running container"
   echo "  dcp web:/app/logs/ ./logs/        # Copy logs from container to host"
   echo "  dcp ./config.json web:/app/       # Copy config from host to container"
+  echo "  dlogin my-container               # Login to container with bash"
   echo "  dsearch postgres                  # Search for postgres images"
   echo "  drmi <none>                       # Remove untagged images"
   echo "  ah-update                         # Update plugin to latest version"
