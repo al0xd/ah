@@ -16,6 +16,13 @@ alias dcd='docker compose down'
 alias dcrs='docker compose restart'
 
 # =============
+# PNPM Aliases
+# =============
+alias p='pnpm'
+alias pi='pnpm install'
+alias pr='pnpm run'
+
+# =============
 # Cloudflare Aliases
 # =============
 alias clr='cloudflared tunnel --loglevel debug run'
@@ -322,6 +329,11 @@ ah-help() {
   echo "  dcrs    - docker compose restart"
   echo "  dps     - show running containers (alias for dpsrun)"
   echo ""
+  echo "📘 PNPM ALIASES:"
+  echo "  p       - pnpm"
+  echo "  pi      - pnpm install"
+  echo "  pr      - pnpm run"
+  echo ""
   echo "🐳 DOCKER FUNCTIONS:"
   echo "  dceb <service>                    - Execute bash in container"
   echo "  dclog <service> [-grep <pattern>] - Show container logs"
@@ -363,6 +375,9 @@ ah-help() {
   echo "  dcp web:/app/logs/ ./logs/        # Copy logs from container to host"
   echo "  dcp ./config.json web:/app/       # Copy config from host to container"
   echo "  dlogin my-container               # Login to container with bash"
+  echo "  p add axios                       # Install package using pnpm"
+  echo "  pi                                # Install dependencies"
+  echo "  pr dev                            # Run pnpm script 'dev'"
   echo "  dsearch postgres                  # Search for postgres images"
   echo "  drmi <none>                       # Remove untagged images"
   echo "  ah-update                         # Update plugin to latest version"
