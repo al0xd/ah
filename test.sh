@@ -59,6 +59,7 @@ aliases_to_test=(
     "dcb"
     "dcd"
     "dcrs"
+    "ds"
     "clr"
     "fssh"
     "fsshc"

@@ -55,3 +55,4 @@ config.local
 # Plugin-specific ignores
 .plugin-test/
 .development/
+.gitnexus

@@ -14,6 +14,7 @@ alias dce='docker compose exec'
 alias dcb='docker compose build'
 alias dcd='docker compose down'
 alias dcrs='docker compose restart'
+alias ds='docker restart'
 
 # =============
 # PNPM Aliases
@@ -327,6 +328,7 @@ ah-help() {
   echo "  dcb     - docker compose build"
   echo "  dcd     - docker compose down"
   echo "  dcrs    - docker compose restart"
+  echo "  ds      - docker restart"
   echo "  dps     - show running containers (alias for dpsrun)"
   echo ""
   echo "📘 PNPM ALIASES:"
