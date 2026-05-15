@@ -369,6 +369,10 @@ ah-help() {
   echo "  ah-version                        - Show plugin version"
   echo "  ahu                               - Alias for ah-update"
   echo ""
+  echo "🔁 AUTO-UPDATE (when plugin loads):"
+  echo "  Set AH_AUTO_UPDATE=0 to disable."
+  echo "  AH_AUTO_UPDATE_INTERVAL (seconds, default 86400) — min time between checks."
+  echo ""
   echo "💡 Usage Examples:"
   echo "  dceb web                          # Enter web container bash"
   echo "  dclog api -grep ERROR             # Show API logs filtered by ERROR"
@@ -398,6 +402,63 @@ alias ah='ah-help'
 alias dps='dpsrun'
 alias ahu='ah-update'
 
+# Absolute path to this plugin's directory (for git / auto-update)
+_ah-plugin-root() {
+  print -r -- "${${(%):-%x}:A:h}"
+}
+
+# Optional auto-sync with origin when the plugin is sourced.
+# AH_AUTO_UPDATE=0 disables. AH_AUTO_UPDATE_INTERVAL is seconds between checks (default 86400).
+_ah-auto-update-on-load() {
+  (( ${AH_AUTO_UPDATE:-1} )) || return 0
+
+  local plugin_dir
+  plugin_dir="$(_ah-plugin-root)"
+  [[ -d "$plugin_dir/.git" ]] || return 0
+
+  if [[ -n "$(git -C "$plugin_dir" status --porcelain 2>/dev/null)" ]]; then
+    return 0
+  fi
+
+  local branch
+  branch=$(git -C "$plugin_dir" branch --show-current 2>/dev/null) || return 0
+  [[ -n "$branch" ]] || return 0
+
+  local interval="${AH_AUTO_UPDATE_INTERVAL:-86400}"
+  local stamp="$plugin_dir/.ah-auto-update-stamp"
+  local now
+  now=$(date +%s) || return 0
+  if [[ -f "$stamp" ]]; then
+    local last=0
+    read last <"$stamp" 2>/dev/null || last=0
+    [[ "$last" != <-> ]] && last=0
+    (( now - last < interval )) && return 0
+  fi
+
+  if ! git -C "$plugin_dir" fetch -q origin 2>/dev/null; then
+    return 0
+  fi
+
+  local local_commit remote_commit
+  local_commit=$(git -C "$plugin_dir" rev-parse HEAD 2>/dev/null) || return 0
+  remote_commit=$(git -C "$plugin_dir" rev-parse "origin/$branch" 2>/dev/null) || return 0
+
+  if [[ "$local_commit" == "$remote_commit" ]]; then
+    print -r -- "$now" >"$stamp" 2>/dev/null || true
+    return 0
+  fi
+
+  if ! git -C "$plugin_dir" pull -q origin "$branch" 2>/dev/null; then
+    return 0
+  fi
+
+  print -r -- "$now" >"$stamp" 2>/dev/null || true
+  echo "🔄 AH plugin auto-updated. Reloading..."
+  unset AH_PLUGIN_LOADED
+  source "$plugin_dir/ah.plugin.zsh"
+  return 2
+}
+
 # Plugin version
 ah-version() {
   echo "AH Plugin v1.0.0"
@@ -408,9 +469,8 @@ ah-version() {
 ah-update() {
   echo "🔄 Updating AH Plugin..."
   
-  # Get the plugin directory
-  local plugin_dir="${(%):-%x}"
-  plugin_dir="${plugin_dir:A:h}"
+  local plugin_dir
+  plugin_dir="$(_ah-plugin-root)"
   
   # Change to plugin directory
   cd "$plugin_dir"
@@ -456,8 +516,13 @@ ah-update() {
   fi
 }
 
-# Print welcome message when plugin loads
+# Print welcome message when plugin loads (auto-update is throttled; see ah-help)
 if [[ -z "$AH_PLUGIN_LOADED" ]]; then
+  _ah-auto-update-on-load
+  local _ah_au=$?
+  if (( _ah_au == 2 )); then
+    return 0
+  fi
   export AH_PLUGIN_LOADED=1
   echo "🚀 AH Plugin loaded! Type 'ah' for help."
 fi

@@ -53,6 +53,7 @@ coverage/
 config.local
 
 # Plugin-specific ignores
+.ah-auto-update-stamp
 .plugin-test/
 .development/
 .gitnexus
