@@ -669,6 +669,8 @@ ah-help() {
 }
 
 # Main entry: ah | ah help | ah search <kw> | ah version | ah update
+# unalias first — older plugin / personal aliases.zsh may have left `alias ah`
+unalias ah 2>/dev/null
 ah() {
   local cmd="${1:-help}"
   case "$cmd" in
