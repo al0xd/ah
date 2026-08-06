@@ -38,6 +38,7 @@ Khi thêm alias/function mới, **phải** làm đủ:
 3. Bổ sung `_AH_SYNONYMS` nếu cần khái niệm mới
 4. Cập nhật `ah-help`
 5. Cập nhật `README.md` + `test.sh`
+6. **Bảo mật**: không đưa token/secret/credentials vào code, docs, demo, test
 
 Format catalog: `name|usage|maps_to|description|keywords`
 

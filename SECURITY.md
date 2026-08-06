@@ -36,6 +36,13 @@ If you discover a security vulnerability in the AH Plugin, please report it resp
 - All operations are local to user environment
 - No external network calls except for intended cloud operations
 
+### Community Publish (mandatory)
+This is a **public community** project. Never leak secrets:
+
+- Do **not** commit, push, log, or document: tokens, secret keys, passwords, API keys, private keys, `.env`, credentials
+- Do **not** hardcode secrets in code, demos, tests, or CI
+- Review every diff before commit/PR; if a secret may have leaked → **do not push**, warn immediately and rotate credentials
+
 ### Safe Practices
 - Always review commands before execution
 - Use confirmation prompts for destructive operations

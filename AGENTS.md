@@ -1,5 +1,13 @@
 # AH Plugin — Agent Notes
 
+## Security (community publish) — MANDATORY
+
+Đây là dự án **publish cộng đồng**. Luôn tuân thủ bảo mật:
+
+- Không commit/push/log/docs: token, secret key, password, API key, private key, `.env`, credentials
+- Không hardcode secret trong code/demo/test/CI
+- Review diff trước commit/PR; nghi lộ secret → **không push**, cảnh báo user
+
 ## Command + Search Catalog Sync
 
 Khi thêm / đổi / xóa alias hoặc function trong plugin này:
