@@ -264,6 +264,28 @@ dpsrun() {
   docker ps
 }
 
+# Search running containers by keyword (name, image, ports, status, ...)
+dpsearch() {
+  if [[ -z "$1" ]]; then
+    echo "❌ Usage: dpsearch <keyword>"
+    echo "   Example: dpsearch nginx"
+    echo "   Example: dpsearch 5432"
+    return 1
+  fi
+
+  local header results
+  header=$(docker ps | head -n 1)
+  results=$(docker ps | tail -n +2 | grep -- "$1")
+  if [[ -z "$results" ]]; then
+    echo "ℹ️  No running containers found with keyword: $1"
+    return 0
+  fi
+
+  echo "🔍 Searching running containers for: $1"
+  print -r -- "$header"
+  print -r -- "$results"
+}
+
 # Remove stopped containers
 drmcon() {
   local stopped=$(docker ps -a -q --filter "status=exited")
@@ -367,6 +389,7 @@ _AH_CMD_CATALOG=(
   'ds|ds <container>|docker restart|Restart a docker container|restart reboot stop start container'
   'dps|dps|docker ps|Show running containers|ps list running status container process'
   'dpsrun|dpsrun|docker ps|Show running containers|ps list running status container process'
+  'dpsearch|dpsearch <keyword>|docker ps grep|Search running containers by keyword|search find ps running container filter grep keyword name image port'
   'p|p|pnpm|pnpm shorthand|pnpm node package npm'
   'pi|pi|pnpm install|Install pnpm dependencies|pnpm install deps dependency node'
   'pr|pr <script>|pnpm run|Run a pnpm script|pnpm run script node'
@@ -626,6 +649,7 @@ ah-help() {
   echo ""
   echo "📋 CONTAINER MANAGEMENT:"
   echo "  dpsrun                            - Show running containers"
+  echo "  dpsearch <keyword>                - Search running containers by keyword"
   echo "  drmcon                            - Remove stopped containers"
   echo "  dstopkey <keyword>                - Stop containers by keyword"
   echo "  drmkey <keyword>                  - Remove containers by keyword"
@@ -662,6 +686,7 @@ ah-help() {
   echo "  pi                                # Install dependencies"
   echo "  pr dev                            # Run pnpm script 'dev'"
   echo "  dsearch postgres                  # Search for postgres images"
+  echo "  dpsearch nginx                    # Search running containers for nginx"
   echo "  drmi <none>                       # Remove untagged images"
   echo "  ah-update                         # Update plugin to latest version"
   echo ""

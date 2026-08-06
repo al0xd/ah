@@ -27,6 +27,7 @@ An Oh-My-Zsh plugin that provides a comprehensive collection of Docker, Cloud, a
 
 ### 📋 Container Management
 - **dpsrun** - Show running containers
+- **dpsearch** `<keyword>` - Search running containers by keyword (name, image, ports, …)
 - **drmcon** - Remove stopped containers
 - **dstopkey** `<keyword>` - Stop containers by keyword (lists names first)
 - **drmkey** `<keyword>` - Remove containers by keyword (lists names first)
@@ -63,6 +64,7 @@ drmi <none>               # Remove untagged images
 drmino                    # Clean up dangling images
 
 # Container cleanup
+dpsearch nginx            # Search running containers matching 'nginx'
 drmcon                    # Remove all stopped containers
 dstopkey nginx            # Stop containers with 'nginx' in name
 drmkey nginx              # Remove containers with 'nginx' in name

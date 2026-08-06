@@ -33,6 +33,7 @@ functions_to_test=(
     "drmino"
     "drmiun"
     "dpsrun"
+    "dpsearch"
     "drmcon"
     "dstopkey"
     "drmkey"
