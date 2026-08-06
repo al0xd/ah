@@ -30,6 +30,17 @@ Thank you for your interest in contributing to the AH Plugin! This document prov
 
 ## 📝 Coding Standards
 
+### Adding a new command (REQUIRED checklist)
+Khi thêm alias/function mới, **phải** làm đủ:
+
+1. Implement trong `ah.plugin.zsh`
+2. **Thêm entry vào `_AH_CMD_CATALOG`** (để `ah search` tìm được)
+3. Bổ sung `_AH_SYNONYMS` nếu cần khái niệm mới
+4. Cập nhật `ah-help`
+5. Cập nhật `README.md` + `test.sh`
+
+Format catalog: `name|usage|maps_to|description|keywords`
+
 ### Naming Conventions
 - Use descriptive function names
 - Prefix all functions with relevant namespace (e.g., `dc` for docker-compose)

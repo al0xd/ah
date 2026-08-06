@@ -29,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `dstopkey <keyword>` — stop running containers by name keyword (lists names + confirm)
+- `drmkey` now lists container names explicitly before remove
+- `ah search <keyword>` — semantic search across AH commands (synonyms + ranked suggestions)
+- `ah` is now a dispatcher: `ah help|search|version|update` (shortcuts: `s`, `v`, `u`)
+
 ### Planned
 - Git workflow aliases
 - Kubernetes support

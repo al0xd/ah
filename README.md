@@ -28,7 +28,8 @@ An Oh-My-Zsh plugin that provides a comprehensive collection of Docker, Cloud, a
 ### 📋 Container Management
 - **dpsrun** - Show running containers
 - **drmcon** - Remove stopped containers
-- **drmkey** `<keyword>` - Remove containers by keyword
+- **dstopkey** `<keyword>` - Stop containers by keyword (lists names first)
+- **drmkey** `<keyword>` - Remove containers by keyword (lists names first)
 
 ### ☁️ Cloudflare
 - **clr** - `cloudflared tunnel --loglevel debug run`
@@ -37,6 +38,16 @@ An Oh-My-Zsh plugin that provides a comprehensive collection of Docker, Cloud, a
 - **fssh** - `fly ssh console`
 - **fsshc** - `fly ssh console --pty -C "bin/rails console"`
 - **flog** - `fly logs`
+
+## 🔎 Semantic command search
+
+```bash
+ah search stop              # Find stop/halt/kill related commands
+ah search "remove image"    # Multi-word semantic search
+ah s logs                   # Short form of ah search
+```
+
+Example — `ah search stop` suggests `dstopkey`, `dcd`, `drmcon`, `ds`, `dcrs`, …
 
 ## 📚 Usage Examples
 
@@ -53,6 +64,7 @@ drmino                    # Clean up dangling images
 
 # Container cleanup
 drmcon                    # Remove all stopped containers
+dstopkey nginx            # Stop containers with 'nginx' in name
 drmkey nginx              # Remove containers with 'nginx' in name
 ```
 
@@ -99,6 +111,37 @@ antigen bundle al0xd/ah
 Add this line to your `.zshrc`:
 ```bash
 zinit load al0xd/ah
+```
+
+## 🔄 Update (Oh-My-Zsh)
+
+Custom plugins **không** được cập nhật bởi `omz update` — chỉ Oh-My-Zsh core thôi. Dùng một trong các cách sau:
+
+### Cách 1: Built-in (khuyến nghị)
+
+```bash
+ahu              # alias ngắn
+ah update        # hoặc: ah-update
+```
+
+Plugin sẽ `git pull` thư mục cài đặt rồi reload tự động.
+
+### Cách 2: Git pull thủ công (OMZ custom plugins)
+
+```bash
+cd ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/ah
+git pull origin main   # hoặc: master — tùy branch remote
+source ~/.zshrc
+```
+
+### Auto-update khi mở shell
+
+Khi plugin load, nó có thể tự `git fetch`/`pull` (throttle mặc định 24h). Tắt hoặc chỉnh:
+
+```bash
+# trong ~/.zshrc, trước khi Oh-My-Zsh load plugins
+export AH_AUTO_UPDATE=0                    # tắt auto-update
+export AH_AUTO_UPDATE_INTERVAL=86400         # giây giữa các lần check (mặc định 86400)
 ```
 
 ## 🎯 Quick Start

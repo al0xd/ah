@@ -34,8 +34,11 @@ functions_to_test=(
     "drmiun"
     "dpsrun"
     "drmcon"
+    "dstopkey"
     "drmkey"
+    "ah"
     "ah-help"
+    "ah-search"
     "ah-version"
 )
 
@@ -64,8 +67,8 @@ aliases_to_test=(
     "fssh"
     "fsshc"
     "flog"
-    "ah"
     "dps"
+    "ahu"
 )
 
 for alias_name in "${aliases_to_test[@]}"; do
@@ -75,6 +78,16 @@ for alias_name in "${aliases_to_test[@]}"; do
         echo "❌ $alias_name - not found"
     fi
 done
+
+echo ""
+echo "🔎 Testing ah search:"
+echo "--------------------"
+ah search stop
+if [ $? -eq 0 ]; then
+    echo "✅ ah search works"
+else
+    echo "❌ ah search failed"
+fi
 
 echo ""
 echo "🎯 Testing error handling:"

@@ -50,6 +50,7 @@ echo "📋 Container Management Demo:"
 echo "----------------------------"
 echo "dps                        # Show running containers"
 echo "drmcon                     # Remove stopped containers"
+echo "dstopkey nginx            # Stop containers with 'nginx' in name"
 echo "drmkey nginx              # Remove containers with 'nginx' in name"
 echo ""
 

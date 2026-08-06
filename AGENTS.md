@@ -1,3 +1,15 @@
+# AH Plugin — Agent Notes
+
+## Command + Search Catalog Sync
+
+Khi thêm / đổi / xóa alias hoặc function trong plugin này:
+
+- **BẮT BUỘC** cập nhật `_AH_CMD_CATALOG` trong `ah.plugin.zsh` để `ah search` nhận lệnh mới
+- Cập nhật `_AH_SYNONYMS` nếu cần
+- Đồng bộ `ah-help`, `README.md`, `test.sh`
+
+Format: `name|usage|maps_to|description|keywords`
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
